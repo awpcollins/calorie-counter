@@ -7,9 +7,7 @@ const ItemCtrl = (() => {
   };
 
   const data = {
-    items: [
-      new Item(0, 'steak', 123),
-    ],
+    items: [],
     currentItem: null,
     totalCalories: 0,
   };
@@ -30,6 +28,12 @@ const ItemCtrl = (() => {
 
   return {
     getItems() {
+      const items = localStorage.getItem('items');
+
+      if (items !== null) {
+        data.items = JSON.parse(items);
+      }
+
       return data.items;
     },
 
@@ -45,6 +49,8 @@ const ItemCtrl = (() => {
 
     removeItem() {
       data.items.splice(getIndex(data.currentItem.id), 1);
+
+      localStorage.setItem('items', JSON.stringify(data.items));
     },
 
     addItem(input) {
@@ -52,6 +58,8 @@ const ItemCtrl = (() => {
       const newItem = new Item(id, input.name, parseInt(input.calories, 10));
 
       data.items.push(newItem);
+
+      localStorage.setItem('items', JSON.stringify(data.items));
 
       return newItem;
     },
@@ -63,7 +71,15 @@ const ItemCtrl = (() => {
       item.name = input.name;
       item.calories = input.calories;
 
+      localStorage.setItem('items', JSON.stringify(data.items));
+
       return item;
+    },
+
+    clearItems() {
+      data.items = [];
+
+      localStorage.clear();
     },
 
     getSetTotalCalories() {

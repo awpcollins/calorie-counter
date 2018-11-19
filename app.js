@@ -1,17 +1,18 @@
 const App = ((ItemCtrl, UICtrl) => {
   const {
-    itemList, addBtn, updateBtn, removeBtn, backBtn,
+    itemList, addBtn, updateBtn, removeBtn, backBtn, clearBtn,
   } = UICtrl.getSelectors();
 
   const loadEventListeners = function loadEventListeners() {
     addBtn.addEventListener('click', itemAdd);
     updateBtn.addEventListener('click', itemUpdate);
-    itemList.addEventListener('click', itemEdit);
+    itemList.addEventListener('click', editState);
     removeBtn.addEventListener('click', itemRemove);
     backBtn.addEventListener('click', back);
+    clearBtn.addEventListener('click', clear);
   };
 
-  const itemEdit = e => {
+  const editState = e => {
     if (e.target.classList.contains('edit-item')) {
       const elem = e.target.parentNode.parentNode;
       const idNum = elem.id.split('-').pop();
@@ -23,6 +24,12 @@ const App = ((ItemCtrl, UICtrl) => {
     e.preventDefault();
   };
 
+  const inputState = () => {
+    UICtrl.showTotalCalories(ItemCtrl.getSetTotalCalories());
+    UICtrl.clearInput();
+    UICtrl.resetState();
+  };
+
   const itemAdd = e => {
     const input = UICtrl.getItemInput();
 
@@ -30,9 +37,7 @@ const App = ((ItemCtrl, UICtrl) => {
       const newItem = ItemCtrl.addItem(input);
 
       UICtrl.addListItem(newItem);
-      UICtrl.showTotalCalories(ItemCtrl.getSetTotalCalories());
-      UICtrl.clearInput();
-      UICtrl.resetState();
+      inputState();
     }
     e.preventDefault();
   };
@@ -44,9 +49,7 @@ const App = ((ItemCtrl, UICtrl) => {
       const item = ItemCtrl.updateItem(input);
 
       UICtrl.updateListItem(item);
-      UICtrl.showTotalCalories(ItemCtrl.getSetTotalCalories());
-      UICtrl.clearInput();
-      UICtrl.resetState();
+      inputState();
     }
     e.preventDefault();
   };
@@ -54,9 +57,7 @@ const App = ((ItemCtrl, UICtrl) => {
   const itemRemove = e => {
     ItemCtrl.removeItem();
     UICtrl.removeListItem(ItemCtrl.getCurrentItem().id);
-    UICtrl.showTotalCalories(ItemCtrl.getSetTotalCalories());
-    UICtrl.clearInput();
-    UICtrl.resetState();
+    inputState();
 
     e.preventDefault();
   };
@@ -65,6 +66,13 @@ const App = ((ItemCtrl, UICtrl) => {
     UICtrl.clearInput();
     UICtrl.resetState();
     UICtrl.showListItem(ItemCtrl.getCurrentItem().id);
+    e.preventDefault();
+  };
+
+  const clear = e => {
+    ItemCtrl.clearItems();
+    UICtrl.removeAllListItems();
+    inputState();
     e.preventDefault();
   };
 

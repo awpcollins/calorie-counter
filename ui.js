@@ -6,6 +6,7 @@ const UICtrl = (() => {
     backBtn: document.querySelector('.back-btn'),
     removeBtn: document.querySelector('.remove-btn'),
     updateBtn: document.querySelector('.update-btn'),
+    clearBtn: document.querySelector('.clear-btn'),
     itemName: document.querySelector('#item-name'),
     itemCalories: document.querySelector('#item-calories'),
     totalCalories: document.querySelector('.total-calories'),
@@ -100,6 +101,10 @@ const UICtrl = (() => {
       const listItem = document.querySelector(`#item-${id}`);
 
       listItem.remove();
+    },
+
+    removeAllListItems() {
+      UISelectors.itemList.innerHTML = '';
     },
 
     showListItem(id) {
